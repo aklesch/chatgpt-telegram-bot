@@ -217,8 +217,15 @@ def get_user_budget(config, user_id) -> float | None:
         return float(user_budgets[0])
 
     allowed_user_ids = config['allowed_user_ids'].split(',')
+
     if str(user_id) in allowed_user_ids:
         user_index = allowed_user_ids.index(str(user_id))
+        if len(user_budgets) == 1:
+            # same budget for all users, use the only value
+            logging.warning('only one value for budgets set, '
+                            'this value is used as budget for every user in a list.')
+            return float(user_budgets[0])
+
         if len(user_budgets) <= user_index:
             logging.warning(f'No budget set for user id: {user_id}. Budget list shorter than user list.')
             return 0.0
