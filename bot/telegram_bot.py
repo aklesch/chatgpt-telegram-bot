@@ -94,9 +94,7 @@ class ChatGPTTelegramBot:
                 '\n\n' +
                 '\n'.join(commands_description) +
                 '\n\n' +
-                localized_text('help_text', bot_language)[1] +
-                '\n\n' +
-                localized_text('help_text', bot_language)[2]
+                localized_text('help_text', bot_language)[1]
         )
         await update.message.reply_text(help_text, disable_web_page_preview=True)
 
@@ -338,7 +336,8 @@ class ChatGPTTelegramBot:
         await context.bot.send_voice(update.effective_message.chat_id, voice=file)
         text = f'{localized_text("tts_selected_preview_description", self.config["bot_language"])} {callback_data}'
         await update.callback_query.edit_message_text(text=text,
-                                                      reply_markup=await selected_voice_preview_menu_keyboard(self.config['bot_language']))
+                                                      reply_markup=await selected_voice_preview_menu_keyboard(
+                                                          self.config['bot_language']))
 
     async def tts(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """
@@ -348,17 +347,17 @@ class ChatGPTTelegramBot:
                 or not await self.check_allowed_and_within_budget(update, context):
             return
 
-        # user_query = message_text(update.message)
+        # tts_query = message_text(update.message)
+        # #user_query = message_text(update.message)
         user_query = message_text(update.message).replace('"', '').replace("'", '')
-
-        logging.info(f'(msg: {user_query})')
 
         first_word = user_query.split(' ', 1)[0]
         if first_word in VOICES:
             voice = first_word
             tts_query = user_query.split(' ', 1)[1]
         else:
-            voice = self.config['tts_voice']
+            # voice = self.config['tts_voice']
+            voice = self.openai.config['tts_voice']
             tts_query = user_query
 
         if tts_query == '':
@@ -374,6 +373,7 @@ class ChatGPTTelegramBot:
         async def _generate():
             try:
                 speech_file, text_length = await self.openai.generate_speech(text=tts_query, voice=voice)
+                # speech_file, text_length = await self.openai.generate_speech(text=tts_query)
 
                 await update.effective_message.reply_voice(
                     reply_to_message_id=get_reply_to_message_id(self.config, update),

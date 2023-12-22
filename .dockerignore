@@ -1,1 +1,15 @@
-usage_logs
+**/*__pycache__
+**/*.idea
+**/*.DS_Store
+/usage_logs
+**/*venv
+**/*.cache
+.git
+.gitignore
+.github
+*.env*
+/.sops.yaml
+/.run
+/.dockerignore
+docker-compose.yml
+Dockerfile

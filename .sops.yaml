@@ -1,0 +1,6 @@
+creation_rules:
+  - path_regex: \.env$
+#    encrypted_regex: '^(OPENAI_API_KEY)$'
+    age: >-
+      age13v62juxyq66a04aksa0gm4wud889j0fge50xvqzkxkpmvr5m045q7ueckf,
+      age1ludhmkcyfmjpslfme8yttu2mc929xpe6npcuvxk3k97xac3xq9usff3jrx

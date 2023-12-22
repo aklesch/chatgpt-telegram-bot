@@ -1,7 +1,10 @@
 __pycache__
 /.idea
-.env
+*.env
+!*.enc.env
 .DS_Store
 /usage_logs
-venv
-/.cache
+venv/
+data/
+/.cache/
+/.run/

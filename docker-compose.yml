@@ -1,9 +1,10 @@
 version: '3'
 services:
-  mia_rs_chat_bot:
+  test_bot:
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - .:/app
+      - ./app/usage_logs:/app/usage_logs
     restart: unless-stopped

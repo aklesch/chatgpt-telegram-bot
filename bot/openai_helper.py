@@ -361,9 +361,14 @@ class OpenAIHelper:
     async def generate_speech(self, text: str, voice) -> tuple[any, int]:
         """
         Generates an audio from the given text using TTS model.
-        :param prompt: The text to send to the model
+        :param text: The text to send to the model
+        :param voice: voice to use by the model
         :return: The audio in bytes and the text size
         """
+        model = self.config['tts_model']
+        logging.info(f'Selected voice: {voice}')
+        logging.info(f'Selected model: {model}')
+
         bot_language = self.config['bot_language']
         try:
             response = await self.client.audio.speech.create(
