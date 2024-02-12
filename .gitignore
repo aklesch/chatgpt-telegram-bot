@@ -8,3 +8,5 @@ venv/
 data/
 /.cache/
 /.run/
+/bot/previews/*.wav
+**/test*.py

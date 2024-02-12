@@ -6,6 +6,12 @@ ex_path=$(dirname "$0")
 _pwd=$PWD
 work_dir=$(cd "${ex_path}"/.. && pwd)
 
+## exits script (for testing)
+function stop() {
+  cd ${_pwd}
+  exit 0
+}
+
 # csvquote util (https://github.com/dbro/csvquote) is needed
 #  in case of OSX installs it if not present or exits otherwise
 if ! command -v csvquote &> /dev/null; then
@@ -48,11 +54,13 @@ ids=$(csvquote ${users} | tr -d '\r' | awk -v col="${column}" -F, '(NR>1 && leng
 # compare ids
 old_array=(${(@s:,:)old})
 new_array=(${(@s:,:)ids})
-echo -e "Users added:\n"
+echo -e "\nUsers added:"
 comm -13 <(echo $old_array | sort | tr ' ' '\n') <(echo $new_array | sort | tr ' ' '\n')
-echo -e "\nUsers removed:\n"
+echo -e "\nUsers removed:"
 comm -23 <(echo $old_array | sort | tr ' ' '\n') <(echo $new_array | sort | tr ' ' '\n')
-echo -e "\n"
+echo
+
+#stop
 
 # Change ENV value for specified key in env file
 #  for plain env
@@ -64,10 +72,9 @@ echo -e "\n"
 rm -f ${users}
 
 ## DOCKER
-#  use remote docker context with --context docker flag
+#  use remote docker context with --context flag
 context='cit-droplet'
 name='sputnik_bot'
-#docker context use ${context}
 
 #version=$(docker images ${name} --format "{{.Tag}}" | grep -v latest)
 
@@ -76,9 +83,11 @@ docker --context ${context} rm -f ${name}
 #  start container with new env
 \sops exec-file --no-fifo ${file} "docker --context ${context} run -d -v /home/aamite/usage_logs:/app/usage_logs --env-file {} --restart=always --name=${name} ${name}"
 
+#
+docker --context ${context} ps -a
+echo
+docker --context ${context} logs ${name}
+echo
+
 # cd to initial user path
 cd ${_pwd}
-
-## exits script (for testing)
-#cd ${_pwd}
-#exit 0
