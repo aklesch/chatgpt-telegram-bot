@@ -38,10 +38,10 @@ users='users.csv'
 # Downloads google spreadsheet in silent mode following requested url redirects to a local csv file
 curl -sL "https://docs.google.com/spreadsheets/d/${google_sheet_id}/export?format=csv&gid=0" -o ${users}
 
-# Gets column number with telegram ID by searching for word "telegram" in table headers
-column=$(csvheader users.csv | grep telegram | awk '{print $1}')
+# Get column number with telegram ID by searching for word "telegram" in table headers
+column=$(csvheader ${users} | grep telegram | awk '{print $1}')
 
-# Gets comma separated list of telegram user ids from appropriate downloaded csv
+# Get comma separated list of telegram user ids from appropriate downloaded csv
 #  tr -d '\r' - replaces DOS line breaks with normal ones
 #  awk uses comma as filed separator (-F,)
 #  prints third column (telegram IDs) from second line (suppresses table header)
@@ -77,7 +77,7 @@ echo "=================="
 context='cit-droplet'
 name='sputnik_bot'
 
-#version=$(docker images ${name} --format "{{.Tag}}" | grep -v latest)
+#version=$(docker --context=$context images ${name} --format "{{.Tag}}" | grep -v latest)
 
 #  remove old container
 docker --context ${context} rm -f ${name}
@@ -92,3 +92,39 @@ echo
 
 # cd to initial user path
 cd ${_pwd}
+
+
+function demo() {
+  emulate -L zsh
+  zmodload zsh/zutil || return
+
+  # Default option values can be specified as (value).
+  local help verbose message file=(default)
+
+  # Brace expansions are great for specifying short and long
+  # option names without duplicating any information.
+  zparseopts -D -F -K -- \
+    {h,-help}=help       \
+    {v,-verbose}=verbose \
+    {f,-file}:=file || return
+  # zparseopts prints an error message if it cannot parse
+  # arguments, so we can simply return on error.
+
+  if (( $#help )); then
+    print -rC1 --      \
+      "$0 [-h|--help]" \
+      "$0 [-v|--verbose] [-f|--file=<file>] [<message...>]"
+    return
+  fi
+
+  # Presence of options can be checked via (( $#option )).
+  if (( $#verbose )); then
+    print verbose
+  fi
+
+  # Values of options can be retrieved through $option[-1].
+  print -r -- "file: ${(q+)file[-1]}"
+
+  # Positional arguments are in $@.
+  print -rC1 -- "message: "${(q+)^@}
+}
