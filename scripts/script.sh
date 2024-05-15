@@ -46,3 +46,12 @@ MONGODB_VERSION=6.0-ubi8
 #docker run --name mongodb -d mongodb/mongodb-community-server:$MONGODB_VERSION
 docker run --name mongodb -d -p 27017:27017 mongodb/mongodb-community-server:$MONGODB_VERSION
 docker run --name mongodb -d -p 27017:27017 -v $(pwd)/data:/data/db mongodb/mongodb-community-server:$MONGODB_VERSION
+
+docker context update
+
+docker context update \
+    --description "CIT droplet" \
+    --docker "host=ssh://aamite@cit-droplet:443" \
+    cit-droplet
+
+    --docker "host=tcp://myserver:2376,ca=~/ca-file,cert=~/cert-file,key=~/key-file" \

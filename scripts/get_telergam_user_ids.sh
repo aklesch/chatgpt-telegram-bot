@@ -54,9 +54,9 @@ ids=$(csvquote ${users} | tr -d '\r' | awk -v col="${column}" -F, '(NR>1 && leng
 # compare ids
 old_array=(${(@s:,:)old})
 new_array=(${(@s:,:)ids})
-echo -e "\nUsers added:"
+echo -e "==================\nUsers added:"
 comm -13 <(echo $old_array | sort | tr ' ' '\n') <(echo $new_array | sort | tr ' ' '\n')
-echo -e "\nUsers removed:"
+echo -e "==================\nUsers removed:"
 comm -23 <(echo $old_array | sort | tr ' ' '\n') <(echo $new_array | sort | tr ' ' '\n')
 echo
 
@@ -72,6 +72,7 @@ echo
 rm -f ${users}
 
 ## DOCKER
+echo "=================="
 #  use remote docker context with --context flag
 context='cit-droplet'
 name='sputnik_bot'
