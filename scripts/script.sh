@@ -54,4 +54,8 @@ docker context update \
     --docker "host=ssh://aamite@cit-droplet:443" \
     cit-droplet
 
-    --docker "host=tcp://myserver:2376,ca=~/ca-file,cert=~/cert-file,key=~/key-file" \
+#--docker "host=tcp://myserver:2376,ca=~/ca-file,cert=~/cert-file,key=~/key-file" \
+docker context create \
+    --description "APetrov" \
+    --docker "host=lexxpetroff@ext-southafrica-vultr.rian.ru:22" \
+    my-context
